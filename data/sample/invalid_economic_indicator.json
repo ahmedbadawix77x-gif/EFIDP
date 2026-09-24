@@ -1,0 +1,9 @@
+{
+  "indicator_code": "X",
+  "observation_date": "2099-01-01",
+  "value": "not-a-number",
+  "unit": "",
+  "source": "",
+  "frequency": "HOURLY_INVALID",
+  "source_type": "invalid_origin"
+}

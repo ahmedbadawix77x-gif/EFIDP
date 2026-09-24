@@ -15,10 +15,11 @@ The complete system specification, architecture proposal, and 23-phase engineeri
 👉 [docs/architecture/phase-0-blueprint.md](docs/architecture/phase-0-blueprint.md)
 
 ### Current Status
-- [x] **Phase 0:** Requirements, Data Strategy, and System Architecture Blueprint
+- [x] **Phase 0:** Requirements, Data Strategy, and System Architecture Blueprint ([docs/architecture/phase-0-blueprint.md](docs/architecture/phase-0-blueprint.md))
 - [x] **Phase 1:** Repository Foundation, Tooling, and Core Package (`src/efidp`)
-- [ ] **Phase 2:** Infrastructure & Local Docker Environment (MinIO, Postgres, Kafka, Airflow)
-- [ ] **Phase 3:** Data Contracts & Source Framework
+- [x] **Phase 2:** Infrastructure & Local Docker Environment (PostgreSQL 16, MinIO, Kafka KRaft, Redis 7, Airflow 2.8, Prometheus, Grafana, Serving API)
+- [x] **Phase 3:** Data Contracts & Source Framework (Pydantic v2 schemas, JSON Schema Draft 2020-12, declarative YAML source registry, structured validation engine)
+- [ ] **Phase 4:** Raw Data Ingestion & Bronze Lake Storage (Upcoming)
 
 ---
 
@@ -78,5 +79,28 @@ efidp-platform/
 ├── pyproject.toml      # Project dependencies and tool configurations
 └── README.md
 ```
+
+## 4. Data Contracts & Extensible Source Framework (Phase 3)
+
+The platform enforces contract-first data engineering using Pydantic v2 and JSON Schema Draft 2020-12.
+
+- **Contracts Documentation**: [`docs/data-contracts.md`](docs/data-contracts.md)
+- **Source Framework Documentation**: [`docs/source-framework.md`](docs/source-framework.md)
+
+### Implemented Contracts (`src/efidp/contracts/`)
+1. **Synthetic Financial Transactions (`synthetic_financial_transactions`, v1.0.0)**:
+   Simulates Egyptian electronic retail payment rails (`InstaPay`, `POS`, `Mobile_Wallet`, `ATM`, `Web`) across the 27 Egyptian Governorates with strict EGP value boundaries and risk scores. Origin explicitly classified as `synthetic`.
+2. **Macroeconomic Indicators (`macroeconomic_indicators`, v1.0.0)**:
+   Macroeconomic time-series (inflation, GDP growth, interest rates) from CBE and World Bank supporting `ANNUAL`, `SEMI_ANNUAL`, `QUARTERLY`, `MONTHLY`, and `DAILY` observations. Origin classified as `real_public`.
+3. **Market Observations (`market_data`, v1.0.0)**:
+   Daily and intra-day EGX capital market session observations with cross-field price consistency checks (`high_price >= low_price`). Origin classified as `real_public`.
+4. **Standard Ingestion Metadata Envelope (`ingestion_envelope_metadata`, v1.0.0)**:
+   Standardized envelope wrapping batch payloads with lineage tracing (`ingestion_id`, `source_id`), SHA-256 payload integrity hashing, and extraction run durations. Origin classified as `derived`.
+
+### Extensible Source Framework (`src/efidp/sources/`)
+- Declarative source registry configured via [`config/sources.yaml`](config/sources.yaml).
+- Abstract base connector (`BaseDataSource`) defining connection validation, schema introspection, and extraction interfaces.
+- Implemented connectors: `APIDataSource`, `FileDataSource`, and `MockDataSource`.
+- Automated test fixtures and machine-readable validation error reporting (`ContractValidator`).
 
 For complete local development guidelines, refer to [docs/setup/development-setup.md](docs/setup/development-setup.md).

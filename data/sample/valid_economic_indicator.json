@@ -1,0 +1,14 @@
+{
+  "indicator_code": "CBE_CORRIDOR_LENDING",
+  "observation_date": "2024-03-01",
+  "value": 27.25,
+  "previous_value": 21.25,
+  "unit": "%",
+  "source": "Central Bank of Egypt",
+  "frequency": "MONTHLY",
+  "metadata": {
+    "meeting_type": "Monetary Policy Committee",
+    "decision": "Rate Hike 600 bps"
+  },
+  "source_type": "real_public"
+}

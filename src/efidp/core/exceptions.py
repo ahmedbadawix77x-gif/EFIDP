@@ -29,5 +29,17 @@ class DataQualityError(EFIDPError):
     """Raised when a dataset fails a critical data quality gate check."""
 
 
+class ContractValidationError(DataQualityError):
+    """Raised when incoming data violates an established Pydantic/JSON schema contract."""
+
+
+class SchemaVersionMismatchError(ContractValidationError):
+    """Raised when payload schema version is incompatible with contract version."""
+
+
+class SourceConfigurationError(ConfigurationError):
+    """Raised when a data source definition in sources.yaml is malformed or invalid."""
+
+
 class StorageError(EFIDPError):
     """Raised when object storage (MinIO/S3) or database interaction fails."""

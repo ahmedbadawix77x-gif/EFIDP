@@ -1,24 +1,94 @@
 # ==============================================================================
-# EFIDP - Data Source Registry Configuration
+# EFIDP — Data Source Registry Configuration
+# ==============================================================================
+# Declarative registry defining all authorized data ingestion sources,
+# connector types, endpoints, schemas, and resilience policies.
 # ==============================================================================
 version: "1.0"
 
 sources:
-  - id: "world_bank_egypt"
-    name: "World Bank Open Data API (Egypt)"
-    type: "api"
-    enabled: true
+  - source_id: "world_bank_egypt"
+    source_name: "World Bank Open Data API (Egypt Indicators)"
     source_type: "real_public"
-    base_url: "http://api.worldbank.org/v2/country/EGY"
-
-  - id: "cbe_open_statistics"
-    name: "Central Bank of Egypt Open Statistics"
-    type: "file"
+    dataset: "economic_indicators"
+    schema_version: "1.0.0"
+    connector_type: "api"
+    endpoint: "http://api.worldbank.org/v2/country/EGY/indicator"
     enabled: true
+    retry_policy:
+      max_retries: 3
+      backoff_factor: 2.0
+      timeout_seconds: 30.0
+    schedule_cron: "0 2 1 * *" # Monthly on 1st at 02:00 UTC
+    extra_params:
+      format: "json"
+      indicators:
+        - "FP.CPI.TOTL.ZG"      # Consumer Price Index / Inflation
+        - "NY.GDP.MKTP.CD"      # Gross Domestic Product (USD)
+        - "FR.INR.RINR"         # Real Interest Rate
+        - "BX.TRF.PWKR.CD.DT"   # Personal Remittances Received
+
+  - source_id: "cbe_open_statistics"
+    source_name: "Central Bank of Egypt Open Statistics"
     source_type: "real_public"
-
-  - id: "synthetic_tx_feed"
-    name: "Egyptian Retail Financial Transactions Generator"
-    type: "streaming"
+    dataset: "economic_indicators"
+    schema_version: "1.0.0"
+    connector_type: "file"
+    path: "data/seeds/cbe_indicators_history.json"
     enabled: true
+    retry_policy:
+      max_retries: 2
+      backoff_factor: 1.5
+      timeout_seconds: 15.0
+    schedule_cron: "0 6 * * 1" # Weekly Monday 06:00 UTC
+    extra_params:
+      institution: "Central Bank of Egypt"
+      file_format: "json"
+
+  - source_id: "egx_market_daily"
+    source_name: "Egyptian Exchange (EGX) Market Watch"
+    source_type: "real_public"
+    dataset: "daily_market"
+    schema_version: "1.0.0"
+    connector_type: "file"
+    path: "data/seeds/egx_indices_daily.json"
+    enabled: true
+    retry_policy:
+      max_retries: 3
+      backoff_factor: 1.5
+      timeout_seconds: 20.0
+    schedule_cron: "30 15 * * 0-4" # Sunday-Thursday after EGX market close (15:30 UTC)
+    extra_params:
+      indices: ["EGX30", "EGX70", "EGX100"]
+
+  - source_id: "synthetic_retail_transactions"
+    source_name: "Egyptian Retail Banking Synthetic Transaction Stream"
     source_type: "synthetic"
+    dataset: "financial_transactions"
+    schema_version: "1.0.0"
+    connector_type: "streaming"
+    enabled: true
+    retry_policy:
+      max_retries: 5
+      backoff_factor: 2.0
+      timeout_seconds: 10.0
+    schedule_cron: null # Continuous streaming
+    extra_params:
+      topic: "efidp.transactions.raw"
+      rate_per_sec: 100
+      disclaimer: "Strictly synthetic simulation data for analytics and benchmarking."
+
+  - source_id: "mock_test_provider"
+    source_name: "High-Fidelity Integration Test Mock Provider"
+    source_type: "synthetic"
+    dataset: "financial_transactions"
+    schema_version: "1.0.0"
+    connector_type: "mock"
+    enabled: true
+    retry_policy:
+      max_retries: 1
+      backoff_factor: 1.0
+      timeout_seconds: 5.0
+    schedule_cron: null
+    extra_params:
+      mock: true

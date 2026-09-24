@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "Frequency": {
+      "description": "Observation frequency for macroeconomic indicators and time-series data.",
+      "enum": [
+        "ANNUAL",
+        "SEMI_ANNUAL",
+        "QUARTERLY",
+        "MONTHLY",
+        "DAILY"
+      ],
+      "title": "Frequency",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Macroeconomic indicator observation contract (World Bank, Central Bank of Egypt, etc.).",
+  "properties": {
+    "indicator_code": {
+      "description": "Standardized code identifying the economic indicator",
+      "examples": [
+        "FP.CPI.TOTL.ZG",
+        "CBE_CORRIDOR_LENDING",
+        "USD_EGP_BUY"
+      ],
+      "maxLength": 64,
+      "minLength": 2,
+      "title": "Indicator Code",
+      "type": "string"
+    },
+    "observation_date": {
+      "description": "Reference observation date for the statistical measurement",
+      "examples": [
+        "2024-01-01"
+      ],
+      "format": "date",
+      "title": "Observation Date",
+      "type": "string"
+    },
+    "value": {
+      "description": "Observed numeric value of the indicator",
+      "examples": [
+        35.7
+      ],
+      "title": "Value",
+      "type": "number"
+    },
+    "previous_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Previous period observed value where available for delta calculation",
+      "examples": [
+        33.2
+      ],
+      "title": "Previous Value"
+    },
+    "unit": {
+      "description": "Unit of measurement (e.g., %, EGP, USD, Index Points)",
+      "examples": [
+        "%"
+      ],
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Unit",
+      "type": "string"
+    },
+    "source": {
+      "description": "Publishing authority or institution (e.g., Central Bank of Egypt, World Bank)",
+      "examples": [
+        "Central Bank of Egypt"
+      ],
+      "maxLength": 128,
+      "minLength": 2,
+      "title": "Source",
+      "type": "string"
+    },
+    "frequency": {
+      "$ref": "#/$defs/Frequency",
+      "description": "Reporting frequency (ANNUAL, SEMI_ANNUAL, QUARTERLY, MONTHLY, DAILY)"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "description": "Supplementary contextual metadata, notes, or raw API response fragments",
+      "title": "Metadata",
+      "type": "object"
+    },
+    "source_type": {
+      "const": "real_public",
+      "default": "real_public",
+      "description": "Origin classification marking this data as verified public statistics",
+      "title": "Source Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "indicator_code",
+    "observation_date",
+    "value",
+    "unit",
+    "source",
+    "frequency"
+  ],
+  "title": "EconomicIndicatorRecord",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

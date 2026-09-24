@@ -1,0 +1,10 @@
+{
+  "asset_code": "E",
+  "trading_date": "2099-12-31",
+  "close": -100.0,
+  "open": 500.0,
+  "high": 400.0,
+  "low": 600.0,
+  "volume": -50,
+  "source_type": "real_public"
+}

@@ -41,7 +41,7 @@ async def check_redis() -> dict[str, Any]:
             socket_connect_timeout=3.0,
         )
         await client.ping()
-        await client.aclose()
+        await client.close()
         return {"status": "healthy", "host": host, "port": port}
     except Exception as exc:
         return {"status": "unhealthy", "error": str(exc), "host": host, "port": port}

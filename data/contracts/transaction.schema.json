@@ -1,0 +1,180 @@
+{
+  "$defs": {
+    "ChannelType": {
+      "description": "Financial transaction channels in the Egyptian retail banking and payments ecosystem.",
+      "enum": [
+        "InstaPay",
+        "POS",
+        "Mobile_Wallet",
+        "ATM",
+        "Web"
+      ],
+      "title": "ChannelType",
+      "type": "string"
+    },
+    "Governorate": {
+      "description": "The 27 official administrative governorates of the Arab Republic of Egypt.",
+      "enum": [
+        "Cairo",
+        "Giza",
+        "Alexandria",
+        "Dakahlia",
+        "Red Sea",
+        "Beheira",
+        "Fayoum",
+        "Gharbia",
+        "Ismailia",
+        "Menofia",
+        "Minya",
+        "Qalioubia",
+        "New Valley",
+        "Suez",
+        "Aswan",
+        "Assiut",
+        "Beni Suef",
+        "Port Said",
+        "Damietta",
+        "Sharqia",
+        "South Sinai",
+        "North Sinai",
+        "Sohag",
+        "Qena",
+        "Luxor",
+        "Matrouh",
+        "Kafr El-Sheikh"
+      ],
+      "title": "Governorate",
+      "type": "string"
+    },
+    "TransactionCategory": {
+      "description": "Merchant and transaction category classifications.",
+      "enum": [
+        "Retail",
+        "Groceries",
+        "Utilities",
+        "Healthcare",
+        "Government_Fees",
+        "Entertainment",
+        "Education",
+        "Transport"
+      ],
+      "title": "TransactionCategory",
+      "type": "string"
+    },
+    "TransactionStatus": {
+      "description": "Status lifecycle of a financial transaction event.",
+      "enum": [
+        "COMPLETED",
+        "DECLINED",
+        "REVERSED"
+      ],
+      "title": "TransactionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Synthetic retail financial transaction event contract (Egyptian Market Context).\n\nDISCLAIMER: This dataset represents synthetic simulated transactions modeled after\nEgyptian retail payment behaviors (InstaPay, Mobile Wallets, POS, ATM).\nIt contains NO actual banking records or real customer PII.",
+  "properties": {
+    "transaction_id": {
+      "description": "Unique identifier for the financial transaction event",
+      "examples": [
+        "tx-cai-2024-001928374"
+      ],
+      "maxLength": 64,
+      "minLength": 8,
+      "title": "Transaction Id",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "UTC timestamp when the transaction occurred. Must be >= 2000-01-01 and not in the future.",
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "account_id": {
+      "description": "Pseudonymous synthetic customer account identifier",
+      "examples": [
+        "acc-99210-eg"
+      ],
+      "maxLength": 64,
+      "minLength": 4,
+      "title": "Account Id",
+      "type": "string"
+    },
+    "merchant_id": {
+      "description": "Synthetic merchant or terminal identifier",
+      "examples": [
+        "mch-cai-hyper-01"
+      ],
+      "maxLength": 64,
+      "minLength": 4,
+      "title": "Merchant Id",
+      "type": "string"
+    },
+    "governorate": {
+      "$ref": "#/$defs/Governorate",
+      "description": "Egyptian governorate where the payment or terminal interaction took place"
+    },
+    "channel": {
+      "$ref": "#/$defs/ChannelType",
+      "description": "Payment channel used (e.g. InstaPay, POS, Mobile_Wallet, ATM, Web)"
+    },
+    "category": {
+      "$ref": "#/$defs/TransactionCategory",
+      "description": "Merchant spending category (e.g. Retail, Groceries, Utilities)"
+    },
+    "amount_egp": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,10}|(?=[\\d.]{1,13}0*$)\\d{0,10}\\.\\d{0,2}0*$)",
+          "type": "string"
+        }
+      ],
+      "description": "Transaction amount in Egyptian Pounds (EGP). Must be strictly positive.",
+      "examples": [
+        "249.50"
+      ],
+      "title": "Amount Egp"
+    },
+    "status": {
+      "$ref": "#/$defs/TransactionStatus",
+      "description": "Execution status of the transaction event"
+    },
+    "risk_score": {
+      "description": "Computed transaction risk probability score between 0.0 (clean) and 1.0 (fraud)",
+      "examples": [
+        0.042
+      ],
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Risk Score",
+      "type": "number"
+    },
+    "source_type": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "description": "Explicit origin classification marking this data as synthetic simulation",
+      "title": "Source Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "transaction_id",
+    "timestamp",
+    "account_id",
+    "merchant_id",
+    "governorate",
+    "channel",
+    "category",
+    "amount_egp",
+    "status",
+    "risk_score"
+  ],
+  "title": "FinancialTransactionEvent",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

@@ -1,0 +1,14 @@
+{
+  "_disclaimer": "SYNTHETIC FIXTURE - Intentionally invalid payload for negative contract testing.",
+  "transaction_id": "short",
+  "timestamp": "1995-05-12T08:00:00Z",
+  "account_id": "",
+  "merchant_id": "mch-01",
+  "governorate": "InvalidProvince",
+  "channel": "BitCoinNetwork",
+  "category": "Cryptocurrency",
+  "amount_egp": -500.00,
+  "status": "NON_EXISTENT_STATUS",
+  "risk_score": 1.75,
+  "source_type": "synthetic"
+}

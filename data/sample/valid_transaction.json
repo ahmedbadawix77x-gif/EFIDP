@@ -1,0 +1,14 @@
+{
+  "_disclaimer": "SYNTHETIC FIXTURE - For testing and simulation purposes only. Does not represent real banking data.",
+  "transaction_id": "tx-cai-20240315-091428-a89f",
+  "timestamp": "2024-03-15T09:14:28Z",
+  "account_id": "acc-cai-91028374",
+  "merchant_id": "mch-cai-hyperone-01",
+  "governorate": "Cairo",
+  "channel": "InstaPay",
+  "category": "Groceries",
+  "amount_egp": 850.75,
+  "status": "COMPLETED",
+  "risk_score": 0.025,
+  "source_type": "synthetic"
+}

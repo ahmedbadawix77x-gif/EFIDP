@@ -1,0 +1,132 @@
+{
+  "$defs": {
+    "IngestionMetadata": {
+      "additionalProperties": false,
+      "description": "Standardized metadata envelope accompanying every raw ingestion batch.",
+      "properties": {
+        "ingestion_id": {
+          "description": "Unique identifier for the specific ingestion execution instance",
+          "examples": [
+            "ingest-cbe-20240310-090000"
+          ],
+          "minLength": 8,
+          "title": "Ingestion Id",
+          "type": "string"
+        },
+        "source_id": {
+          "description": "Registered identifier of the originating data source",
+          "examples": [
+            "cbe_open_statistics"
+          ],
+          "maxLength": 64,
+          "minLength": 2,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_type": {
+          "$ref": "#/$defs/SourceClassification",
+          "description": "Origin classification of the data (real_public, synthetic, derived)"
+        },
+        "dataset_name": {
+          "description": "Canonical target dataset name",
+          "examples": [
+            "economic_indicators"
+          ],
+          "maxLength": 64,
+          "minLength": 2,
+          "title": "Dataset Name",
+          "type": "string"
+        },
+        "extracted_at": {
+          "description": "UTC timestamp when extraction completed and envelope was sealed",
+          "format": "date-time",
+          "title": "Extracted At",
+          "type": "string"
+        },
+        "schema_version": {
+          "description": "Semantic version of the target schema contract (e.g., 1.0.0)",
+          "examples": [
+            "1.0.0"
+          ],
+          "maxLength": 16,
+          "minLength": 3,
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "payload_hash": {
+          "description": "SHA-256 cryptographic checksum of the raw extracted payload",
+          "examples": [
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          ],
+          "maxLength": 64,
+          "minLength": 64,
+          "title": "Payload Hash",
+          "type": "string"
+        },
+        "row_count": {
+          "description": "Number of records contained within the extraction batch",
+          "examples": [
+            100
+          ],
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        },
+        "extraction_start_time": {
+          "description": "UTC timestamp marking the start of the data extraction phase",
+          "format": "date-time",
+          "title": "Extraction Start Time",
+          "type": "string"
+        },
+        "extraction_end_time": {
+          "description": "UTC timestamp marking the completion of the data extraction phase",
+          "format": "date-time",
+          "title": "Extraction End Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ingestion_id",
+        "source_id",
+        "source_type",
+        "dataset_name",
+        "extracted_at",
+        "schema_version",
+        "payload_hash",
+        "row_count",
+        "extraction_start_time",
+        "extraction_end_time"
+      ],
+      "title": "IngestionMetadata",
+      "type": "object"
+    },
+    "SourceClassification": {
+      "description": "Classification of data origin ensuring synthetic data is never confused with real data.",
+      "enum": [
+        "real_public",
+        "synthetic",
+        "derived"
+      ],
+      "title": "SourceClassification",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/IngestionMetadata"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    }
+  },
+  "required": [
+    "metadata",
+    "payload"
+  ],
+  "title": "IngestionEnvelope[dict[str, Any]]",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

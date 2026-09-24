@@ -1,0 +1,134 @@
+{
+  "additionalProperties": false,
+  "description": "Daily market observation and index snapshot contract (Egyptian Exchange EGX).",
+  "properties": {
+    "asset_code": {
+      "description": "Ticker or index identifier (e.g., EGX30, EGX70, COMI)",
+      "examples": [
+        "EGX30"
+      ],
+      "maxLength": 32,
+      "minLength": 2,
+      "title": "Asset Code",
+      "type": "string"
+    },
+    "trading_date": {
+      "description": "Market trading session date",
+      "examples": [
+        "2024-03-10"
+      ],
+      "format": "date",
+      "title": "Trading Date",
+      "type": "string"
+    },
+    "close": {
+      "description": "Mandatory session closing index/price value. Must be strictly positive.",
+      "examples": [
+        28540.25
+      ],
+      "exclusiveMinimum": 0.0,
+      "title": "Close",
+      "type": "number"
+    },
+    "open": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional session opening index/price value",
+      "examples": [
+        28100.5
+      ],
+      "title": "Open"
+    },
+    "high": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional intra-session high value",
+      "examples": [
+        28650.0
+      ],
+      "title": "High"
+    },
+    "low": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional intra-session low value",
+      "examples": [
+        28050.1
+      ],
+      "title": "Low"
+    },
+    "volume": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional total executed share/contract trade count",
+      "examples": [
+        145200300
+      ],
+      "title": "Volume"
+    },
+    "turnover": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional total transaction value / turnover in EGP",
+      "examples": [
+        3250100450.0
+      ],
+      "title": "Turnover"
+    },
+    "source_type": {
+      "const": "real_public",
+      "default": "real_public",
+      "description": "Origin classification marking this data as verified public market data",
+      "title": "Source Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_code",
+    "trading_date",
+    "close"
+  ],
+  "title": "MarketObservationRecord",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
