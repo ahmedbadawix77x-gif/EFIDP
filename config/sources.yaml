@@ -1,0 +1,24 @@
+# ==============================================================================
+# EFIDP - Data Source Registry Configuration
+# ==============================================================================
+version: "1.0"
+
+sources:
+  - id: "world_bank_egypt"
+    name: "World Bank Open Data API (Egypt)"
+    type: "api"
+    enabled: true
+    source_type: "real_public"
+    base_url: "http://api.worldbank.org/v2/country/EGY"
+
+  - id: "cbe_open_statistics"
+    name: "Central Bank of Egypt Open Statistics"
+    type: "file"
+    enabled: true
+    source_type: "real_public"
+
+  - id: "synthetic_tx_feed"
+    name: "Egyptian Retail Financial Transactions Generator"
+    type: "streaming"
+    enabled: true
+    source_type: "synthetic"
