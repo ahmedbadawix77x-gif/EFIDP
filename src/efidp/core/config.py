@@ -66,6 +66,14 @@ class KafkaSettings(BaseSettings):
     )
 
 
+class RedisSettings(BaseSettings):
+    """Redis cache and in-memory store settings."""
+
+    host: str = Field(default="localhost", validation_alias="REDIS_HOST")
+    port: int = Field(default=6379, validation_alias="REDIS_PORT")
+    db: int = Field(default=0, validation_alias="REDIS_DB")
+
+
 class PlatformSettings(BaseSettings):
     """Unified application settings containing all platform subsystems."""
 
@@ -87,6 +95,7 @@ class PlatformSettings(BaseSettings):
     postgres: PostgresSettings = Field(default_factory=PostgresSettings)
     minio: MinioSettings = Field(default_factory=MinioSettings)
     kafka: KafkaSettings = Field(default_factory=KafkaSettings)
+    redis: RedisSettings = Field(default_factory=RedisSettings)
 
 
 @lru_cache(maxsize=1)
